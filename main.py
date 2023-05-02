@@ -1,8 +1,32 @@
 from basic_scraper import ScrapeWorker
 from topic_modelling_worker import TopicModellingWorker
 from topic_modelling import *
+import pandas as pd
+
 scrape_worker = ScrapeWorker("data/")
-scrape_status, urls = scrape_worker.scrape("https://www.databricks.com/blog/2021/07/29/an-experimentation-pipeline-for-extracting-topics-from-text-data-using-pyspark.html")
+
+
+#pandas read csv
+pd_medium = pd.read_csv('kaggle_dataset_medium.csv')
+print(pd_medium.head())
+
+#get only link column
+medium_links = pd_medium['link'].tolist()
+
+#add medium_link to scraping_links.txt
+scraping_links_f = open('scraping_links.txt', 'w')
+for link in medium_links:
+    scraping_links_f.write(link + '\n')
+scraping_links_f.close()
+
+
+scraping_links_f = open('scraping_links.txt', 'r')
+scraping_links = scraping_links_f.readlines()
+
+
+
+for link in scraping_links:
+    scrape_status, urls = scrape_worker.scrape(link)
 
 clean_data_params = {
     'min_df': 0.01,
