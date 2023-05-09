@@ -61,46 +61,11 @@ chrome.runtime.onInstalled.addListener(function () {
     const data = await response.json();
     console.log("response: " + JSON.stringify(data));
 
-    requested_keywords = data['keywords'];
+    let urls= data.scores.map(item => item.url);
 
-    //convert requested_keywords to comma separated list
-    requested_keywords = requested_keywords.join(",");
-    //replace ' ' with '_' in requested_keywords
+    console.log(urls);
 
-    requested_keywords = requested_keywords.replace(/ /g, "_");
-    console.log("requested_keywords: " + requested_keywords);
-
-    const new_param = {
-      'query': 'machine_learning&',
-      'community': '6451cb04d299148c0dc9ca10'
-    };
-
-    const new_headers = {
-      'authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjYzY2RhOTA2MWNhMmY5MTIzZGY2ZTgyOSJ9.kbroNq3ioSUPaX_1r_Is-R9Q9ka3fsrmtrCA6AyQs8U',
-      'authority': 'textdata.org',
-      'origin': 'chrome-extension://bldpjacibfnempiocmnloilpbeliejcl'
-    };
-
-    const request_url = 'https://textdata.org/api/search?' + 'query=' + requested_keywords + '&community=' + new_param['community'];
-
-    console.log("request_url: " + request_url);
-
-    const new_options = {
-      url: request_url,
-      headers: headers,
-    };
-
-    //make http request using fetch for the request url
-    const new_response = await fetch(new_options.url, {
-      method: 'GET',
-      headers: new_headers
-    });
-
-
-    const new_data = await new_response.json();
-    console.log("final resp: " + JSON.stringify(new_data));
-
-    urls = ["https://www.youtube.com/watch?v=Ei8WyajsPYY","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12"]
+    //urls = ["https://www.youtube.com/watch?v=Ei8WyajsPYY","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12"]
     
     // urls.forEach(function (url) {
     //   chrome.tabs.create({ url: url });
