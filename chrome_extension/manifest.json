@@ -1,6 +1,6 @@
 {
-    "name": "Context Menus Sample",
-    "description": "Shows some of the features of the Context Menus API",
+    "name": "Smart Job Description Parser",
+    "description": "Analyses the contents of a job description and provides a list of links that are relevant to help you in the interview",
     "version": "0.7",
     "permissions": ["contextMenus"],
     "host_permissions": [
@@ -8,6 +8,10 @@
     ],
     "background": {
       "service_worker": "sample.js"
+    },
+    "icons": {
+      "16": "ai.png",
+      "128": "ai.png"
     },
     "manifest_version": 3
   }

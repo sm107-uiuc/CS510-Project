@@ -20,7 +20,7 @@ chrome.runtime.onInstalled.addListener(function () {
   ];
   for (let i = 0; i < contexts.length; i++) {
     let context = contexts[i];
-    let title = "Test '" + context + "' menu item";
+    let title = "Send the selected job description to TextData.org";
     chrome.contextMenus.create({
       title: title,
       contexts: [context],
