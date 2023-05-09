@@ -9,6 +9,7 @@ from basic_scraper import ScrapeWorker
 from flask_apscheduler import APScheduler
 import pandas as pd
 import traceback
+from semantic_sim import calculate_score
 import json
 
 #defaults
@@ -97,6 +98,40 @@ def index():
             "status": "error",
             "message": "An error occured"
         })
+
+
+@app.route('/semantic', methods=['POST'])
+def index():
+    try:
+        data = request.json
+
+        query = data["query"]
+        urls = data["urls"]
+        
+        with open('final_2.json') as json_file:
+            all_data = json.load(json_file)
+            all_data = [json.loads(str(file)) for file in all_data]
+            all_data = [file for file in all_data if type(file) == dict]
+
+        documents = []
+        lookup = {}
+        for data in all_data:
+            lookup[data['url']] = data['all_paragraphs']
+        for url in urls:
+            documents.append(lookup[url])
+        scores = calculate_score(query, documents)
+
+        return jsonify({
+            "status": "success",
+            "scores": scores
+        })
+    except Exception:
+        print("ERROR")
+        print(traceback.format_exc())
+        return jsonify({
+            "status": "error",
+            "message": "An error occured"
+        })
     
 
 
@@ -121,7 +156,6 @@ def get_keywords_score(all_urls):
     except Exception as e:
         print(e)
         return []
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, port=PORT)
