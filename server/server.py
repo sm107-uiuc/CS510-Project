@@ -5,9 +5,11 @@
 from flask import Flask,jsonify, request
 from cso_classifier import CSOClassifier
 import pickle
+from basic_scraper import ScrapeWorker
 from flask_apscheduler import APScheduler
 import pandas as pd
 import traceback
+import json
 
 #defaults
 """
@@ -17,6 +19,14 @@ def background_task():
     print("Saving model")
     with open('./models/tfidf_3.pkl','wb') as f :
         pickle.dump(vec,f)
+
+
+def get_all_keywords(keywords_df, vocab):
+    keywords = {}
+    for index, row in keywords_df.iterrows():
+        if row['keyword'] in vocab:
+            keywords[row['keyword']] = row['tf-idf']
+    return keywords
     
 # Schedule the task to run every 30 minutes
 scheduler = APScheduler()
@@ -28,6 +38,8 @@ job = scheduler.add_job(id='update_models',func=background_task, trigger='interv
 
 cc = CSOClassifier(modules = "syntactic", enhancement = "first")
 vec = pickle.load(open('./models/tfidf_3.pkl','rb'))
+vocab = pickle.load(open('./models/vocab2.pkl','rb'))
+scrapper_worker = ScrapeWorker()
 PORT=8080
 
 """
@@ -85,6 +97,30 @@ def index():
             "status": "error",
             "message": "An error occured"
         })
+    
+
+
+def get_keywords_score(all_urls):
+    try:
+        result = []
+        for url in all_urls:
+            scrapped_data = scrapper_worker.scrape(url)
+            if(scrapped_data["scrape_status"]["code"] == "1"):
+                tf_idf = vec.transform([" ".join(scrapped_data["webpage"]["all_paragraphs"])])
+                result_tfidf = pd.DataFrame(tf_idf.toarray(), columns=vec.get_feature_names_out())
+                test_tfidf_row = result_tfidf.loc[0]
+                keywords_df = pd.DataFrame({
+                    'keyword':test_tfidf_row.index,
+                    'tf-idf':test_tfidf_row.values
+                })
+                result.append({
+                    "url" : url,
+                    "keywords" : get_all_keywords(keywords_df, vocab),
+                })
+        return result
+    except Exception as e:
+        print(e)
+        return []
 
 
 if __name__ == "__main__":
