@@ -1,4 +1,4 @@
-from cosine_similarity import CosineSimilarity
+from RankingModule.cosine_similarity import CosineSimilarity
 
 class RankResults:
     def __init__(self, query_json, results_json, result_docs) -> None:

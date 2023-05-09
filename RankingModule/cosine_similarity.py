@@ -70,10 +70,10 @@ class CosineSimilarity:
         return out
 
 
-if __name__ == "__main__":
-    query_json = json.load(open('sample_master_query.json','r'))
-    results_json = json.load(open('sample_master_result.json','r'))
+# if __name__ == "__main__":
+#     query_json = json.load(open('sample_master_query.json','r'))
+#     results_json = json.load(open('sample_master_result.json','r'))
 
-    cosine_similarity = CosineSimilarity(query_json, results_json)
+#     cosine_similarity = CosineSimilarity(query_json, results_json)
 
-    print(cosine_similarity.calculate_cosine_similarity())
+#     print(cosine_similarity.calculate_cosine_similarity())

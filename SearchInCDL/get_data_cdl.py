@@ -3,18 +3,24 @@ import requests
 import json
 import sys
 
+sys.path.append("../CS510-Project-1")
+from constants import constants
+
+
+
 class GetTop50DataFromCDL:
     def __init__(self, keyword_list) -> None:
         self.keyword_list = keyword_list
-        self.url = 'https://textdata.org/api/search'
+        self.url = constants.search_url
+
         self.headers = {
-        'authorization': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjYzY2RhOTA2MWNhMmY5MTIzZGY2ZTgyOSJ9.kbroNq3ioSUPaX_1r_Is-R9Q9ka3fsrmtrCA6AyQs8U',
+        'authorization': constants.auth_token,
         'authority': 'textdata.org',
-        'origin': 'chrome-extension://bldpjacibfnempiocmnloilpbeliejcl'
+        'origin': constants.origin,
         }
         self.params = {
             'query': ",".join(self.keyword_list),
-            'community': '6451cb04d299148c0dc9ca10'
+            'community': constants.community_key,
         }
 
         #make GET request to CDL
@@ -61,11 +67,11 @@ class GetTop50DataFromCDL:
 
         return result_urls
 
-# if __name__ == "__main__":
-#     keyword_list = ["machine_learning", "software_engineering"]
-#     print(keyword_list)
-#     getTop50DataFromCDL = GetTop50DataFromCDL(keyword_list)
-#     result = getTop50DataFromCDL.doItsThing()
+if __name__ == "__main__":
+    keyword_list = ["machine_learning", "software_engineering"]
+    print(keyword_list)
+    getTop50DataFromCDL = GetTop50DataFromCDL(keyword_list)
+    result = getTop50DataFromCDL.doItsThing()
 
 
 
