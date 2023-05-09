@@ -140,7 +140,7 @@ def index():
                 'score': ranker_res[i][0]
             }
             final_scores.append(temp)
-        sorted(final_scores, key=lambda d: d['score'])
+        final_scores = sorted(final_scores, key=lambda d: d['score'])[::-1]
         return jsonify({
             "status": "success",
             "scores": final_scores
