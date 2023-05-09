@@ -4,7 +4,7 @@ const curl = require('curl');
 
 const func = async () => {
     const param = {
-      'query': 'machine_learning',
+      'query': 'machine_learning&',
       'community': '6451cb04d299148c0dc9ca10'
     };
     const headers = {
