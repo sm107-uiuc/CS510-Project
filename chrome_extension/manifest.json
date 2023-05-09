@@ -2,12 +2,16 @@
     "name": "Smart Job Description Parser",
     "description": "Analyses the contents of a job description and provides a list of links that are relevant to help you in the interview",
     "version": "0.7",
-    "permissions": ["contextMenus"],
+    "permissions": ["contextMenus","tabs", "activeTab"],
     "host_permissions": [
         "http://161.35.6.154:8080/"
     ],
     "background": {
       "service_worker": "sample.js"
+    },
+    "action": {
+      "default_icon": "ai.png",
+      "default_popup": "popup.html"
     },
     "icons": {
       "16": "ai.png",

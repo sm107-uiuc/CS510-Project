@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 chrome.runtime.onInstalled.addListener(function () {
   // Create one test item for each context type.
   let contexts = [
@@ -101,7 +100,24 @@ chrome.runtime.onInstalled.addListener(function () {
     const new_data = await new_response.json();
     console.log("final resp: " + JSON.stringify(new_data));
 
+    urls = ["https://www.youtube.com/watch?v=Ei8WyajsPYY","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12","https://www.youtube.com/watch?v=tyB0ztf0DNY&list=PLgUwDviBIf0qUlt5H_kiKYaNSqJ81PMMY&index=12"]
+    
+    // urls.forEach(function (url) {
+    //   chrome.tabs.create({ url: url });
+    // });
 
+    chrome.runtime.onConnect.addListener((port) => {
+      if (port.name === "popup") {
+        port.onMessage.addListener(async (message) => {
+          if (message.action === "getUrls") {
+            port.postMessage({ urls });
+          }
+        });
+      }
+    });
+
+
+    
 
   }
   );
